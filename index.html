@@ -691,7 +691,21 @@ function showPage(id) {
   });
   document.getElementById('mobileMenu').classList.remove('open');
   window.scrollTo(0, 0);
+  window.location.hash = id;
 }
+
+// Load the correct page on initial load based on URL hash (e.g. #privacy, #terms)
+function loadFromHash() {
+  const hash = window.location.hash.replace('#', '');
+  const validPages = ['home','products','about','results','contact','privacy','terms'];
+  const target = validPages.includes(hash) ? hash : 'home';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + target).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === target);
+  });
+}
+window.addEventListener('hashchange', loadFromHash);
 
 function toggleMenu() {
   document.getElementById('mobileMenu').classList.toggle('open');
@@ -709,6 +723,7 @@ function submitContact() {
 }
 
 renderProducts();
+loadFromHash();
 </script>
 
 </body>
